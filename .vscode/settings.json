@@ -8,5 +8,6 @@
     "azureFunctions.preDeployTask": "npm prune (functions)",
     "cSpell.words": [
         "functionapp"
-    ]
+    ],
+    "github-enterprise.uri": "https://github.com/iqlab-africa"
 }
