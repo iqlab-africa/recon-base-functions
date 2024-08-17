@@ -35,11 +35,16 @@ function convertStreamToString(stream) {
     });
 }
 exports.convertStreamToString = convertStreamToString;
+/**
+ * Returns a secret from Azure Key Vault
+ * @param keyName
+ * @returns a secret string or null if not found
+ */
 function getSecret(keyName) {
     return __awaiter(this, void 0, void 0, function* () {
         const vault_url = `${h1}${f0}${f1}${f2}/`;
         console.log(`🍐 key vault: ${vault_url}`);
-        let result = "";
+        let result;
         try {
             const credential = new identity_1.DefaultAzureCredential();
             const client = new keyvault_secrets_1.SecretClient(vault_url, credential);
@@ -47,16 +52,21 @@ function getSecret(keyName) {
             const encodedKeyName = encodeURIComponent(keyName);
             const secret = yield client.getSecret(encodedKeyName);
             result = secret.value;
+            console.log(`🍐 secret found: ${secret.name} - value: 🅿️ ${secret.value} 🅿️ for keyName: ${keyName}`);
             return result;
         }
         catch (error) {
-            console.log(`Failed ${error}`);
-            throw error;
+            console.log(`👿 getSecret Failed for keyName: ${keyName}, error: ${error}`);
         }
         return result;
     });
 }
 exports.getSecret = getSecret;
+/**
+ * Enable Sequelize data models to enable database access
+ * @param dbJson
+ * @returns
+ */
 function setDataModels(dbJson) {
     return __awaiter(this, void 0, void 0, function* () {
         const j = JSON.parse(dbJson);

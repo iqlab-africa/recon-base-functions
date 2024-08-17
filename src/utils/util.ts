@@ -8,8 +8,8 @@ import { WebHook } from "../models/webhook.data";
 
 const f0 = "robot-keys-2";
 const f1 = ".vault";
-const f2 = ".azure.net"
-const h1 = "https://"
+const f2 = ".azure.net";
+const h1 = "https://";
 
 export async function convertStreamToString(stream: ReadableStream) {
   const reader = stream.getReader();
@@ -24,11 +24,15 @@ export async function convertStreamToString(stream: ReadableStream) {
 
   return result;
 }
-
+/**
+ * Returns a secret from Azure Key Vault
+ * @param keyName 
+ * @returns a secret string or null if not found
+ */
 export async function getSecret(keyName: string): Promise<string> {
   const vault_url = `${h1}${f0}${f1}${f2}/`;
   console.log(`🍐 key vault: ${vault_url}`);
-  let result = "";
+  let result: string | PromiseLike<string>;
   try {
     const credential = new DefaultAzureCredential();
     const client: SecretClient = new SecretClient(vault_url, credential);
@@ -36,19 +40,24 @@ export async function getSecret(keyName: string): Promise<string> {
     const encodedKeyName = encodeURIComponent(keyName);
     const secret: KeyVaultSecret = await client.getSecret(encodedKeyName);
     result = secret.value;
+    console.log(
+      `🍐 secret found: ${secret.name} - value: 🅿️ ${secret.value} 🅿️ for keyName: ${keyName}`
+    );
     return result;
   } catch (error) {
-    console.log(`Failed ${error}`);
-    throw error;
+    console.log(`👿 getSecret Failed for keyName: ${keyName}, error: ${error}`);
   }
 
   return result;
 }
-
+/**
+ * Enable Sequelize data models to enable database access
+ * @param dbJson 
+ * @returns 
+ */
 export async function setDataModels(dbJson: string): Promise<Sequelize> {
   const j = JSON.parse(dbJson);
   console.log(`💛 ...... setDataModels: ${dbJson}`);
-
 
   const sequelize = new Sequelize(j.dbname, j.user, j.password, {
     host: j.host,

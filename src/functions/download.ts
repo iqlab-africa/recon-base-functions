@@ -13,7 +13,12 @@ const container = "robotcontainer";
 const tag = "🔵🔵🔵 DownloaderFunction 🍎 ";
 const KEY = "storage-connection-string";
 const err = "👿 👿 👿";
-
+/**
+ * Function to download files from Azure Storage
+ * @param request
+ * @param context
+ * @returns a HttpResponseInit object with the downloaded string in the body
+ */
 export async function download(
   request: HttpRequest,
   context: InvocationContext
@@ -22,12 +27,17 @@ export async function download(
   context.log(`${tag} request URL: ${request.url}`);
 
   const storageConnectionString = await getSecret(KEY);
+  if (!storageConnectionString) {
+    context.log(`\n${err} Secret key value could not be found\n`);
+    return { status: 400, body: `${err} secrets not uncovered! key: ${KEY}` };
+  }
   const containerClient = new ContainerClient(
     storageConnectionString,
     container
   );
 
-  const json = JSON.parse(await convertStreamToString(request.body));
+  const ss = await convertStreamToString(request.body);
+  const json = JSON.parse(ss);
   context.log(`${tag} incoming json: ${JSON.stringify(json)}`);
 
   try {
@@ -44,15 +54,15 @@ export async function download(
     if (extension === "xlsx") {
       context.log(`${tag} downloading Excel file: ${filename} ...`);
       const downloadResponse = await blobClient.downloadToBuffer();
-     if (downloadResponse.buffer.byteLength > 0) {
-         const arrayBuffer = downloadResponse.buffer; // ArrayBuffer directly
-         const textDecoder = new TextDecoder();
-         const convertedString = textDecoder.decode(arrayBuffer);
-         context.log(`${tag} downloaded spreadsheet ...\n${convertedString}`);
-         return { status: 200, body: convertedString };
-     } else {
-         return { status: 400, body: `${err} File not found` };
-     }
+      if (downloadResponse.buffer.byteLength > 0) {
+        const arrayBuffer = downloadResponse.buffer; // ArrayBuffer directly
+        const textDecoder = new TextDecoder();
+        const convertedString = textDecoder.decode(arrayBuffer);
+        context.log(`${tag} downloaded spreadsheet ...\n${convertedString}`);
+        return { status: 200, body: convertedString };
+      } else {
+        return { status: 400, body: `${err} File not found` };
+      }
     } else {
       context.log(`${tag} downloading .csv file: ${filename} ...`);
       const downloadResponse = await blobClient.download();
@@ -78,6 +88,11 @@ export async function download(
       body: `${err}  File download error occurred: ${error.message}`,
     };
   }
+  /**
+   * Handle ReadableStream
+   * @param readableStream
+   * @returns string from ReadableStream
+   */
   async function getData(readableStream: NodeJS.ReadableStream) {
     return new Promise((resolve, reject) => {
       const chunks = [];

@@ -17,13 +17,24 @@ const container = "robotcontainer";
 const tag = "🔵🔵🔵 DownloaderFunction 🍎 ";
 const KEY = "storage-connection-string";
 const err = "👿 👿 👿";
+/**
+ * Function to download files from Azure Storage
+ * @param request
+ * @param context
+ * @returns a HttpResponseInit object with the downloaded string in the body
+ */
 function download(request, context) {
     return __awaiter(this, void 0, void 0, function* () {
         //
         context.log(`${tag} request URL: ${request.url}`);
         const storageConnectionString = yield (0, util_1.getSecret)(KEY);
+        if (!storageConnectionString) {
+            context.log(`\n${err} Secret key value could not be found\n`);
+            return { status: 400, body: `${err} secrets not uncovered! key: ${KEY}` };
+        }
         const containerClient = new storage_blob_1.ContainerClient(storageConnectionString, container);
-        const json = JSON.parse(yield (0, util_1.convertStreamToString)(request.body));
+        const ss = yield (0, util_1.convertStreamToString)(request.body);
+        const json = JSON.parse(ss);
         context.log(`${tag} incoming json: ${JSON.stringify(json)}`);
         try {
             const blobClient = containerClient.getBlobClient(json.fileName);
@@ -72,6 +83,11 @@ function download(request, context) {
                 body: `${err}  File download error occurred: ${error.message}`,
             };
         }
+        /**
+         * Handle ReadableStream
+         * @param readableStream
+         * @returns string from ReadableStream
+         */
         function getData(readableStream) {
             return __awaiter(this, void 0, void 0, function* () {
                 return new Promise((resolve, reject) => {
