@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.download = void 0;
 const functions_1 = require("@azure/functions");
 const storage_blob_1 = require("@azure/storage-blob");
-const consumers_1 = require("stream/consumers");
 const util_1 = require("../utils/util");
 const container = "robotcontainer";
 const tag = "🔵🔵🔵 DownloaderFunction 🍎 ";
@@ -31,21 +30,27 @@ function download(request, context) {
             const filename = json.fileName;
             const extension = filename.split(".").pop();
             if (extension !== "xlsx" && extension !== "csv") {
-                return { status: 400, body: `${err} Unknown file type. Should be csv or xlsx` };
+                return {
+                    status: 400,
+                    body: `${err} Unknown file type. Should be csv or xlsx`,
+                };
             }
             if (extension === "xlsx") {
                 context.log(`${tag} downloading Excel file: ${filename} ...`);
                 const downloadResponse = yield blobClient.downloadToBuffer();
                 if (downloadResponse.buffer.byteLength > 0) {
-                    const contentString = consumers_1.buffer.toString();
-                    context.log(contentString);
-                    return { status: 200, body: contentString };
+                    const arrayBuffer = downloadResponse.buffer; // ArrayBuffer directly
+                    const textDecoder = new TextDecoder();
+                    const convertedString = textDecoder.decode(arrayBuffer);
+                    context.log(`${tag} downloaded spreadsheet ...\n${convertedString}`);
+                    return { status: 200, body: convertedString };
                 }
                 else {
                     return { status: 400, body: `${err} File not found` };
                 }
             }
             else {
+                context.log(`${tag} downloading .csv file: ${filename} ...`);
                 const downloadResponse = yield blobClient.download();
                 if (downloadResponse.contentLength &&
                     downloadResponse.contentLength > 1) {

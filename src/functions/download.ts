@@ -7,7 +7,6 @@ import {
 import { ReadableStream } from "stream/web";
 
 import { ContainerClient } from "@azure/storage-blob";
-import { buffer } from "stream/consumers";
 import { convertStreamToString, getSecret } from "../utils/util";
 
 const container = "robotcontainer";
@@ -29,9 +28,7 @@ export async function download(
   );
 
   const json = JSON.parse(await convertStreamToString(request.body));
-  context.log(
-    `${tag} incoming json: ${JSON.stringify(json)}`
-  );
+  context.log(`${tag} incoming json: ${JSON.stringify(json)}`);
 
   try {
     const blobClient = containerClient.getBlobClient(json.fileName);
@@ -39,19 +36,25 @@ export async function download(
     const extension = filename.split(".").pop();
 
     if (extension !== "xlsx" && extension !== "csv") {
-      return { status: 400, body: `${err} Unknown file type. Should be csv or xlsx` };
+      return {
+        status: 400,
+        body: `${err} Unknown file type. Should be csv or xlsx`,
+      };
     }
     if (extension === "xlsx") {
       context.log(`${tag} downloading Excel file: ${filename} ...`);
       const downloadResponse = await blobClient.downloadToBuffer();
-      if (downloadResponse.buffer.byteLength > 0) {
-        const contentString = buffer.toString();
-        context.log(contentString);
-        return { status: 200, body: contentString };
-      } else {
-        return { status: 400, body: `${err} File not found` };
-      }
+     if (downloadResponse.buffer.byteLength > 0) {
+         const arrayBuffer = downloadResponse.buffer; // ArrayBuffer directly
+         const textDecoder = new TextDecoder();
+         const convertedString = textDecoder.decode(arrayBuffer);
+         context.log(`${tag} downloaded spreadsheet ...\n${convertedString}`);
+         return { status: 200, body: convertedString };
+     } else {
+         return { status: 400, body: `${err} File not found` };
+     }
     } else {
+      context.log(`${tag} downloading .csv file: ${filename} ...`);
       const downloadResponse = await blobClient.download();
       if (
         downloadResponse.contentLength &&
