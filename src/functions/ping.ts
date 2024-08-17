@@ -7,7 +7,7 @@ export async function ping(request: HttpRequest, context: InvocationContext): Pr
 
     const name = request.query.get('name') || await request.text() || 'Global South';
 
-    return { body: `🥦 🥦 🥦 Hello, ${name}!` };
+    return { status: 200, body: `🥦 🥦 🥦 Hello, ${name}!` };
 };
 
 app.http('ping', {

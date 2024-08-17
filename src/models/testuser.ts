@@ -1,6 +1,5 @@
 import { Table, Column, Model, HasMany, DataType, AutoIncrement } from "sequelize-typescript";
 import { DevBook } from "./book";
-import { sequelize } from ".";
 
 @Table
 export class DevUser extends Model {

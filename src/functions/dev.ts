@@ -9,9 +9,9 @@ import { Client } from "pg";
 import { Sequelize } from "sequelize-typescript";
 import { DevUser } from "../models/testuser";
 import {
-  getDatabaseConnection,
+  getSecret,
   setDataModels,
-  streamToString,
+  convertStreamToString,
 } from "../utils/util";
 
 const KEY = "database-connection-json";
@@ -29,13 +29,13 @@ export async function AddDevUser(
   context.log(`\n\n🧡 AddDevUser processing request: ${new Date()}`);
 
   //get request body json
-  const json = JSON.parse(await streamToString(request.body));
+  const json = JSON.parse(await convertStreamToString(request.body));
   context.log(
     `${tag}  incoming data for insertion into Postgres: ${JSON.stringify(json)}`
   );
 
   try {
-    const s = await getDatabaseConnection(KEY);
+    const s = await getSecret(KEY);
     const sequelize = await setDataModels(s);
     //
     const uname = json.name;
@@ -74,7 +74,7 @@ export async function ListDevUsers(
   context.log(`🧡 ListDevUsers processed request for url "${request.url}"`);
 
   try {
-    const s = await getDatabaseConnection(KEY);
+    const s = await getSecret(KEY);
     const sequelize = await setDataModels(s);
     const rows: DevUser[] = await DevUser.findAll();
     context.log(`${tag} number of rows from client: ${rows.length}`);

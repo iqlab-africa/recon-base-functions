@@ -7,7 +7,12 @@
     "azureFunctions.projectLanguageModel": 4,
     "azureFunctions.preDeployTask": "npm prune (functions)",
     "cSpell.words": [
-        "functionapp"
+        "dbname",
+        "functionapp",
+        "keyvault",
+        "robotcontainer",
+        "storageaccountforrobots",
+        "testuser"
     ],
     "github-enterprise.uri": "https://github.com/iqlab-africa"
 }

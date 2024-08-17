@@ -14,7 +14,7 @@ const functions_1 = require("@azure/functions");
 const testuser_1 = require("../models/testuser");
 const util_1 = require("../utils/util");
 const KEY = "database-connection-json";
-const tag = "🍎 🍎 AddDevUser ";
+const tag = "🍎 AddDevUser ";
 /**
  *
  * @param request DataFunction writes data from Postgres
@@ -25,10 +25,10 @@ function AddDevUser(request, context) {
     return __awaiter(this, void 0, void 0, function* () {
         context.log(`\n\n🧡 AddDevUser processing request: ${new Date()}`);
         //get request body json
-        const json = JSON.parse(yield (0, util_1.streamToString)(request.body));
+        const json = JSON.parse(yield (0, util_1.convertStreamToString)(request.body));
         context.log(`${tag}  incoming data for insertion into Postgres: ${JSON.stringify(json)}`);
         try {
-            const s = yield (0, util_1.getDatabaseConnection)(KEY);
+            const s = yield (0, util_1.getSecret)(KEY);
             const sequelize = yield (0, util_1.setDataModels)(s);
             //
             const uname = json.name;
@@ -63,7 +63,7 @@ function ListDevUsers(request, context) {
     return __awaiter(this, void 0, void 0, function* () {
         context.log(`🧡 ListDevUsers processed request for url "${request.url}"`);
         try {
-            const s = yield (0, util_1.getDatabaseConnection)(KEY);
+            const s = yield (0, util_1.getSecret)(KEY);
             const sequelize = yield (0, util_1.setDataModels)(s);
             const rows = yield testuser_1.DevUser.findAll();
             context.log(`${tag} number of rows from client: ${rows.length}`);

@@ -15,7 +15,7 @@ function ping(request, context) {
     return __awaiter(this, void 0, void 0, function* () {
         context.log(`🥦 🥦 🥦 Http function processed request for url "${request.url}"`);
         const name = request.query.get('name') || (yield request.text()) || 'Global South';
-        return { body: `🥦 🥦 🥦 Hello, ${name}!` };
+        return { status: 200, body: `🥦 🥦 🥦 Hello, ${name}!` };
     });
 }
 exports.ping = ping;

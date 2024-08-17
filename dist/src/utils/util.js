@@ -9,13 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setDataModels = exports.getDatabaseConnection = exports.streamToString = void 0;
+exports.setDataModels = exports.getSecret = exports.convertStreamToString = void 0;
 const identity_1 = require("@azure/identity");
 const keyvault_secrets_1 = require("@azure/keyvault-secrets");
 const sequelize_typescript_1 = require("sequelize-typescript");
 const testuser_1 = require("../models/testuser");
 const book_1 = require("../models/book");
-function streamToString(stream) {
+const webhook_data_1 = require("../models/webhook.data");
+const f0 = "robot-keys-2";
+const f1 = ".vault";
+const f2 = ".azure.net";
+const h1 = "https://";
+function convertStreamToString(stream) {
     return __awaiter(this, void 0, void 0, function* () {
         const reader = stream.getReader();
         const decoder = new TextDecoder();
@@ -29,10 +34,11 @@ function streamToString(stream) {
         return result;
     });
 }
-exports.streamToString = streamToString;
-function getDatabaseConnection(keyName) {
+exports.convertStreamToString = convertStreamToString;
+function getSecret(keyName) {
     return __awaiter(this, void 0, void 0, function* () {
-        const vault_url = "https://robot-keys-2.vault.azure.net/";
+        const vault_url = `${h1}${f0}${f1}${f2}/`;
+        console.log(`🍐 key vault: ${vault_url}`);
         let result = "";
         try {
             const credential = new identity_1.DefaultAzureCredential();
@@ -50,7 +56,7 @@ function getDatabaseConnection(keyName) {
         return result;
     });
 }
-exports.getDatabaseConnection = getDatabaseConnection;
+exports.getSecret = getSecret;
 function setDataModels(dbJson) {
     return __awaiter(this, void 0, void 0, function* () {
         const j = JSON.parse(dbJson);
@@ -60,7 +66,7 @@ function setDataModels(dbJson) {
             dialect: "postgres",
         });
         yield sequelize.authenticate();
-        sequelize.addModels([testuser_1.DevUser, book_1.DevBook]);
+        sequelize.addModels([testuser_1.DevUser, book_1.DevBook, webhook_data_1.WebHook]);
         testuser_1.DevUser.hasMany(book_1.DevBook, { foreignKey: "userId" });
         book_1.DevBook.belongsTo(testuser_1.DevUser, { foreignKey: "userId" });
         console.log("\n\n💛💛💛💛 Data models set up");

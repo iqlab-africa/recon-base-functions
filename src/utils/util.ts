@@ -4,9 +4,14 @@ import { Sequelize } from "sequelize-typescript";
 import { ReadableStream } from "stream/web";
 import { DevUser } from "../models/testuser";
 import { DevBook } from "../models/book";
+import { WebHook } from "../models/webhook.data";
 
+const f0 = "robot-keys-2";
+const f1 = ".vault";
+const f2 = ".azure.net"
+const h1 = "https://"
 
-export async function streamToString(stream: ReadableStream) {
+export async function convertStreamToString(stream: ReadableStream) {
   const reader = stream.getReader();
   const decoder = new TextDecoder();
   let result = "";
@@ -20,8 +25,9 @@ export async function streamToString(stream: ReadableStream) {
   return result;
 }
 
-export async function getDatabaseConnection(keyName: string): Promise<string> {
-  const vault_url = "https://robot-keys-2.vault.azure.net/";
+export async function getSecret(keyName: string): Promise<string> {
+  const vault_url = `${h1}${f0}${f1}${f2}/`;
+  console.log(`🍐 key vault: ${vault_url}`);
   let result = "";
   try {
     const credential = new DefaultAzureCredential();
@@ -50,7 +56,8 @@ export async function setDataModels(dbJson: string): Promise<Sequelize> {
   });
 
   await sequelize.authenticate();
-  sequelize.addModels([DevUser, DevBook]);
+
+  sequelize.addModels([DevUser, DevBook, WebHook]);
   DevUser.hasMany(DevBook, { foreignKey: "userId" });
   DevBook.belongsTo(DevUser, { foreignKey: "userId" });
 
