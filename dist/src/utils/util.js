@@ -16,6 +16,7 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const testuser_1 = require("../models/testuser");
 const book_1 = require("../models/book");
 const webhook_data_1 = require("../models/webhook.data");
+const best_player_1 = require("../models/best_player");
 const f0 = "robot-keys-2";
 const f1 = ".vault";
 const f2 = ".azure.net";
@@ -76,7 +77,7 @@ function setDataModels(dbJson) {
             dialect: "postgres",
         });
         yield sequelize.authenticate();
-        sequelize.addModels([testuser_1.DevUser, book_1.DevBook, webhook_data_1.WebHook]);
+        sequelize.addModels([testuser_1.DevUser, book_1.DevBook, webhook_data_1.WebHook, best_player_1.BestPlayer]);
         testuser_1.DevUser.hasMany(book_1.DevBook, { foreignKey: "userId" });
         book_1.DevBook.belongsTo(testuser_1.DevUser, { foreignKey: "userId" });
         console.log("\n\n💛💛💛💛 Data models set up");

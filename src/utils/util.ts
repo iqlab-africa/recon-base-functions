@@ -5,6 +5,7 @@ import { ReadableStream } from "stream/web";
 import { DevUser } from "../models/testuser";
 import { DevBook } from "../models/book";
 import { WebHook } from "../models/webhook.data";
+import { BestPlayer } from "../models/best_player";
 
 const f0 = "robot-keys-2";
 const f1 = ".vault";
@@ -66,7 +67,7 @@ export async function setDataModels(dbJson: string): Promise<Sequelize> {
 
   await sequelize.authenticate();
 
-  sequelize.addModels([DevUser, DevBook, WebHook]);
+  sequelize.addModels([DevUser, DevBook, WebHook, BestPlayer]);
   DevUser.hasMany(DevBook, { foreignKey: "userId" });
   DevBook.belongsTo(DevUser, { foreignKey: "userId" });
 
