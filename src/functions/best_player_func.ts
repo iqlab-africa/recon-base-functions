@@ -34,13 +34,13 @@ export async function bestPlayer(request: HttpRequest, context: InvocationContex
     });
     await bestPlayer.save();
 
-    context.log(`${tag} ... bestPlayer inserted successfully! 🥬🥬🥬`);
+    context.log(`${tag} ... BestPlayer inserted successfully! 🥬🥬🥬`);
   } catch (error) {
     context.error(`bestPlayer insert failed : ${error}`);
-    return { status: 400, body: `bestPlayer insert failed. ${error}` };
+    return { status: 400, body: `BestPlayer insert failed. ${error}` };
   }
 
-  return { status: 200, body: `🥦 🥦 🥦 bestPlayer ${json.bestPlayer} is OK, how about you?` };
+  return { status: 200, body: `🥦 🥦 🥦 BestPlayer ${json.bestPlayer} is OK, how about you?` };
 };
 
 app.http("bestPlayer", {
