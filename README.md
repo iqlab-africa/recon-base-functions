@@ -2,7 +2,7 @@
 
 This repository contains code that implements Azure Functions to provide an API for Robots that require integration with Azure services. It offers a secure pathway to all the Cloud services necessary and provides a single place for Robots to use API's to satisfy their requirements.
 
-The choice of Azure Functions as serverless backend provides a cost benefit in that the backend application is not running up any charges when it is not running. The backend starts running only when required to serve a running Robot. 
+The choice of Azure Functions as serverless backend provides a cost benefit in that the backend application is not running up any charges when it is not running. The backend starts running only when required to serve a running Robot. This reference project offers examples of creating the required backend API's that drive the robots or other applications.
 
 ## Technologies  
   
