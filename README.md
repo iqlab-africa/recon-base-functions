@@ -2,7 +2,7 @@
 
 This repository contains code that implements Azure Functions to provide an API for Robots that require integration with Azure services. It offers a secure pathway to all the Cloud services necessary and provides a single place for Robots to use API's to satisfy their requirements.
 
-The choice of Azure Functions as serverless backend provides a cost benefit in that the backend application is not running up any charges when it is not running.  
+The choice of Azure Functions as serverless backend provides a cost benefit in that the backend application is not running up any charges when it is not running. The backend starts running only when required to serve a running Robot. 
 
 ## Technologies  
   
@@ -10,6 +10,7 @@ The choice of Azure Functions as serverless backend provides a cost benefit in t
 * Azure Functions
 * Azure Key Vault
 * Azure Storage
+* Azure Postgres Database
 * Typescript
 
 Example of Robots consuming this reference backend: https://github.com/iqlab-africa/recon-base-robot  
@@ -21,3 +22,5 @@ Example of Robots consuming this reference backend: https://github.com/iqlab-afr
 ### Screenshot from Functions deployment  
 
 <img width="880" alt="Screenshot 2024-08-19 at 02 38 24" src="https://github.com/user-attachments/assets/c3dc6218-631f-4782-91dc-d6e3e4859814">  
+
+Assuming that you have cloned the repo, pay some attention to some helpful scripts with .sh extensions. They may help yo work with GitHub via SSH and the run.sh bootstraps the app on your machine. Check out https://github.com/iqlab-africa/recon-base-functions/blob/main/run.sh
