@@ -12,6 +12,8 @@ The choice of Azure Functions as serverless backend provides a cost benefit in t
 * Azure Storage
 * Typescript
 
+Example of Robots consuming this reference backend: https://github.com/iqlab-africa/recon-base-robot  
+
 ### Screenshot from Development execution  
 
 <img width="816" alt="Screenshot 2024-08-19 at 02 35 19" src="https://github.com/user-attachments/assets/124c7461-6ab1-4e4f-8fd8-17b7ff05a0b9">  
