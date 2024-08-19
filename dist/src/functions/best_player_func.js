@@ -13,11 +13,11 @@ exports.bestPlayer = void 0;
 const functions_1 = require("@azure/functions");
 const util_1 = require("../utils/util");
 const best_player_1 = require("../models/best_player");
-const tag = "🥦 🥦 🥦 Webhook";
+const tag = "🌼 🌼 🌼 BestPlayer";
 const KEY = "database-connection-json";
 function bestPlayer(request, context) {
     return __awaiter(this, void 0, void 0, function* () {
-        context.log(`🥦 🥦 🥦 Http function processed request for url "${request.url}"`);
+        context.log(`${tag} Http function processed request for url "${request.url}"`);
         context.log(`${tag} bestPlayer started. will do whatever is required`);
         context.log(`${tag} request URL: ${request.url}`);
         context.log(`${tag} request body: ${request.body}`);
@@ -34,13 +34,13 @@ function bestPlayer(request, context) {
                 bestPlayerId: new Date().getTime(),
             });
             yield bestPlayer.save();
-            context.log(`${tag} ... bestPlayer inserted successfully! 🥬🥬🥬`);
+            context.log(`${tag} ... BestPlayer inserted successfully! 🥬🥬🥬`);
         }
         catch (error) {
             context.error(`bestPlayer insert failed : ${error}`);
-            return { status: 400, body: `bestPlayer insert failed. ${error}` };
+            return { status: 400, body: `BestPlayer insert failed. ${error}` };
         }
-        return { status: 200, body: `🥦 🥦 🥦 bestPlayer ${json.bestPlayer} is OK, how about you?` };
+        return { status: 200, body: `🥦 🥦 🥦 BestPlayer ${json.bestPlayer} is OK, how about you?` };
     });
 }
 exports.bestPlayer = bestPlayer;
