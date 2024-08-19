@@ -154,16 +154,8 @@ This architecture provides a comprehensive and secure platform for development, 
 
 ---
 
-## **9. Architectural Diagrams**
-
-### **9.1 Logical Architecture Diagram**
+## **9. Architectural Diagram**
 
 The logical architecture diagram showcases the organization of the various Azure services in the development, test, and production environments.
+<img width="1363" alt="Dannys Azure Architecture" src="https://github.com/user-attachments/assets/fd7e61fc-2fe9-4c9e-b40a-95c4110a9c85">
 
-![Logical Architecture Diagram](https://via.placeholder.com/800x600.png?text=Logical+Architecture+Diagram)
-
-### **9.2 Network Architecture Diagram**
-
-The network architecture diagram illustrates how the Azure resources are organized within virtual networks, subnets, and the flow of traffic between them.
-
-![Network Architecture Diagram](https://via.placeholder.com/800x600.png?text=Network+Architecture+Diagram)
